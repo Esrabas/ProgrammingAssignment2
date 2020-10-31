@@ -1,15 +1,34 @@
-## Put comments here that give an overall description of what your
-## functions do
+setwd('C:/Users/esb/Desktop/Coursera-R')
 
-## Write a short comment describing this function
+## set the input x as a matrix then  solved value "s" as a null
+## Also I changed every reference to "mean" to "solve"
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(x = matrix(sample(1:100,9),3,3))  {
+  e <- NULL
+  set <- function(y) {
+    x <<- y
+    e <<- NULL
+}
+  get <- function() x
+  setsolve <- function(solve) e <<- solve
+  getsolve <- function() e
+  list(set = set, get = get,
+       setsolve = setsolve,
+       getsolve = getsolve)
 }
 
 
-## Write a short comment describing this function
+## Did Same things here
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+     e <- x$getsolve()
+  if(!is.null(e)) {
+    message("getting inversed matrix")
+    return(e)    
+}
+
+  data <- x$get()
+  e <- solve(data, ...)
+  x$setsolve(e)
+  e
 }
