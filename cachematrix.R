@@ -1,34 +1,35 @@
-setwd('C:/Users/esb/Desktop/Coursera-R')
+## We have two functions makeCacheMatrix,cacheSolve
+##makeCacheMatrix consists of set,get, setinv, getinv.I will use library(MASS)..
+#to calculate inverse for non squared as well as squared matrices
 
-## set the input x as a matrix then  solved value "s" as a null
-## Also I changed every reference to "mean" to "solve"
-
-makeCacheMatrix <- function(x = matrix(sample(1:100,9),3,3))  {
-  e <- NULL
-  set <- function(y) {
+makeCacheMatrix <- function(x=matrix()){
+  inv <- NULL           #initializing inverse as NULL 
+  set <- function(y){
     x <<- y
-    e <<- NULL
+    inv <<- NULL
 }
-  get <- function() x
-  setsolve <- function(solve) e <<- solve
-  getsolve <- function() e
-  list(set = set, get = get,
-       setsolve = setsolve,
-       getsolve = getsolve)
-}
-
-
-## Did Same things here
-
-cacheSolve <- function(x, ...) {
-     e <- x$getsolve()
-  if(!is.null(e)) {
-    message("getting inversed matrix")
-    return(e)    
+  get <- function() x           #function to get matrix x
+  setinverse <- function(inverse) inv <<- inverse
+  getinverse <- function() {
+                           inver<-ginv(x)              #function  to obtain the inverse of the matrix
+                           inver%*%x
+                           }
+  list(set=set, get=get, setinverse=setinverse, getinverse=getinverse)
 }
 
-  data <- x$get()
-  e <- solve(data, ...)
-  x$setsolve(e)
-  e
+##İt is used cache data.And checked whether inverse is NULL or not.Then returns inverse value.
+#After all calculated inverse value. ## Return a matrix that is the inverse of 'x'
+
+cacheSolve <- function(x, ...)   
+  {
+  inv <- x$getinverse()
+  if(!is.null(inv)){                     
+    message("getting cached data!")
+    return(inv)                            
+  }
+  data <-x$get()
+  inv <- solve(data, ...)              
+  x$setinverse(inv)
+  inv           ## Return a matrix that is the inverse of 'x'
+
 }
